@@ -19,6 +19,9 @@ const Statistics = (props) => {
 
     return (
         <div>
+            <Statistic name={props.name3} value={props.value3} />
+            <Statistic name={props.name4} value={props.value4} />
+            <Statistic name={props.name5} value={props.value5} />
             <Statistic name={props.name1} value={props.value1} />
             <Statistic name={props.name2} value={props.value2} />
         </div>
@@ -33,7 +36,6 @@ class App extends React.Component {
             hyva: 0,
             neutraali: 0,
             huono: 0,
-
         }
 
     }
@@ -86,12 +88,13 @@ class App extends React.Component {
                 </div>
 
                 <h1>statistiikka</h1>
-                <div>Hyvä: {this.state.hyva}</div>
-                <div>Neutraali: {this.state.neutraali}</div>
-                <div>Huono: {this.state.huono}</div>
                 <Statistics arvosanaMaara={this.state.hyva + this.state.huono + this.state.neutraali}
                     name1="Keskiarvo" value1={this.keskiarvo()}
                     name2="Positiivisia" value2={this.positiivisia()}
+                    name3="Hyvä" value3={this.state.hyva}
+                    name4="Neutraali" value3={this.state.neutraali}
+                    name5="Huono" value5={this.state.huono}
+
                 />
             </div>
         )
