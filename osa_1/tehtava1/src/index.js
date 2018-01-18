@@ -5,18 +5,26 @@ const Otsikko = (props) => {
     return (
     <div>
         <p>{props.otsikko}</p>
-    </div> 
-    )   
+    </div>
+    )
+}
+
+const Osa = (props) => {
+    return (
+    <div>
+        <p>{props.osa} {props.t}</p>
+    </div>
+    )
 }
 
 const Sisalto = (props) => {
     return (
     <div>
-        <p>{props.osa1} {props.t1}</p>
-        <p>{props.osa2} {props.t2}</p>
-        <p>{props.osa3} {props.t3}</p>
+        <Osa osa={props.osa1} t={props.t1}/>
+        <Osa osa={props.osa2} t={props.t2}/>
+        <Osa osa={props.osa3} t={props.t3}/>
     </div>
-    )   
+    )
 }
 
 const Yhteensa = (props) => {
@@ -24,7 +32,7 @@ const Yhteensa = (props) => {
     <div>
         <p>yhteensä {props.t1 + props.t2 + props.t3} tehtävää</p>
     </div>
-    )    
+    )
 }
 
 const App = () => {
