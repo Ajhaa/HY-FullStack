@@ -9,7 +9,13 @@ const Button = ({handleClick, text}) => (
 )
 
 const Statistic = ({name, value}) => {
-    return <div>{name}: {value}</div>
+    return (
+        <tr>
+            <td>{name}</td>
+            <td>{value}</td>
+        </tr>
+
+    )
 }
 
 const Statistics = (props) => {
@@ -18,13 +24,16 @@ const Statistics = (props) => {
     }
 
     return (
-        <div>
-            <Statistic name={props.name3} value={props.value3} />
-            <Statistic name={props.name4} value={props.value4} />
-            <Statistic name={props.name5} value={props.value5} />
-            <Statistic name={props.name1} value={props.value1} />
-            <Statistic name={props.name2} value={props.value2} />
-        </div>
+        <table>
+            <tbody>
+                <Statistic name={props.name3} value={props.value3} />
+                <Statistic name={props.name4} value={props.value4} />
+                <Statistic name={props.name5} value={props.value5} />
+                <Statistic name={props.name1} value={props.value1} />
+                <Statistic name={props.name2} value={props.value2} />
+            </tbody>
+        </table>
+
     )
 }
 
@@ -39,16 +48,9 @@ class App extends React.Component {
         }
 
     }
-    lisaaHyva = () => {
-        this.setState({hyva: this.state.hyva + 1})
-    }
+    lisaa = (target) => {
 
-    lisaaNeutraali = () => {
-        this.setState({neutraali: this.state.neutraali + 1})
-    }
-
-    lisaaHuono = () => {
-        this.setState({huono: this.state.huono + 1})
+        return () => {this.setState({[target]: this.state[target] + 1})}
     }
 
     keskiarvo = () => {
@@ -57,7 +59,7 @@ class App extends React.Component {
         if (arvosanaSumma === 0) {
             return 0
         }
-        return arvosanaSumma/arvosanaMaara
+        return (arvosanaSumma/arvosanaMaara).toFixed(2)
     }
 
     positiivisia = () => {
@@ -65,7 +67,7 @@ class App extends React.Component {
         if (arvosanaMaara === 0) {
             return '0%'
         }
-        return (this.state.hyva/arvosanaMaara) * 100 + '%'
+        return ((this.state.hyva/arvosanaMaara) * 100).toFixed(2) + '%'
     }
 
     render() {
@@ -74,15 +76,15 @@ class App extends React.Component {
                 <h1>Anna palautetta</h1>
                 <div>
                     <Button
-                        handleClick={this.lisaaHyva}
+                        handleClick={this.lisaa("hyva")}
                         text="hyvä"
                     />
                     <Button
-                        handleClick={this.lisaaNeutraali}
+                        handleClick={this.lisaa("neutraali")}
                         text="neutraali"
                     />
                     <Button
-                        handleClick={this.lisaaHuono}
+                        handleClick={this.lisaa("huono")}
                         text="huono"
                     />
                 </div>
