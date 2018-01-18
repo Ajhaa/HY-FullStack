@@ -8,6 +8,8 @@ const Button = ({handleClick, text}) => (
     </button>
 )
 
+
+
 class App extends React.Component {
     constructor(props) {
         super(props)
@@ -15,7 +17,9 @@ class App extends React.Component {
             hyva: 0,
             neutraali: 0,
             huono: 0
+
         }
+
     }
     lisaaHyva = () => {
         this.setState({hyva: this.state.hyva + 1})
@@ -27,6 +31,23 @@ class App extends React.Component {
 
     lisaaHuono = () => {
         this.setState({huono: this.state.huono + 1})
+    }
+
+    keskiarvo = () => {
+        let arvosanaSumma = this.state.hyva + this.state.huono*(-1)
+        let arvosanaMaara = this.state.hyva + this.state.huono + this.state.neutraali
+        if (arvosanaSumma === 0) {
+            return 0
+        }
+        return arvosanaSumma/arvosanaMaara
+    }
+
+    positiivisia = () => {
+        let arvosanaMaara = this.state.hyva + this.state.huono + this.state.neutraali
+        if (arvosanaMaara === 0) {
+            return 0
+        }
+        return (this.state.hyva/arvosanaMaara) * 100
     }
 
     render() {
@@ -52,7 +73,8 @@ class App extends React.Component {
                 <div>Hyvä: {this.state.hyva}</div>
                 <div>Neutraali: {this.state.neutraali}</div>
                 <div>Huono: {this.state.huono}</div>
-
+                <div>Keskiarvo: {this.keskiarvo().toFixed(2)}</div>
+                <div>Positiivisia: {this.positiivisia().toFixed(2)}%</div>
             </div>
         )
     }
