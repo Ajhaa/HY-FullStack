@@ -92,9 +92,8 @@ class App extends React.Component {
                     name1="Keskiarvo" value1={this.keskiarvo()}
                     name2="Positiivisia" value2={this.positiivisia()}
                     name3="Hyvä" value3={this.state.hyva}
-                    name4="Neutraali" value3={this.state.neutraali}
+                    name4="Neutraali" value4={this.state.neutraali}
                     name5="Huono" value5={this.state.huono}
-
                 />
             </div>
         )
