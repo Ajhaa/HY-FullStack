@@ -3,11 +3,24 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 const Button = ({handleClick, text}) => (
-    <button onClick={handleClick}>
+    <button onClick={handleClick} className="button">
         {text}
     </button>
 )
 
+const Statistic = ({name, value}) => {
+
+    return <div>{name}: {value}</div>
+}
+
+const Statistics = (props) => {
+    return (
+        <div>
+            <Statistic name={props.name1} value={props.value1} />
+            <Statistic name={props.name2} value={props.value2} />
+        </div>
+    )
+}
 
 
 class App extends React.Component {
@@ -45,14 +58,14 @@ class App extends React.Component {
     positiivisia = () => {
         let arvosanaMaara = this.state.hyva + this.state.huono + this.state.neutraali
         if (arvosanaMaara === 0) {
-            return 0
+            return 0 + '%'
         }
-        return (this.state.hyva/arvosanaMaara) * 100
+        return (this.state.hyva/arvosanaMaara) * 100 + '%'
     }
 
     render() {
         return (
-            <div>
+            <div className="root">
                 <h1>Anna palautetta</h1>
                 <div>
                     <Button
@@ -73,8 +86,10 @@ class App extends React.Component {
                 <div>Hyvä: {this.state.hyva}</div>
                 <div>Neutraali: {this.state.neutraali}</div>
                 <div>Huono: {this.state.huono}</div>
-                <div>Keskiarvo: {this.keskiarvo().toFixed(2)}</div>
-                <div>Positiivisia: {this.positiivisia().toFixed(2)}%</div>
+                <Statistics
+                    name1="Keskiarvo" value1={this.keskiarvo()}
+                    name2="Positiivisia" value2={this.positiivisia()}
+                />
             </div>
         )
     }
