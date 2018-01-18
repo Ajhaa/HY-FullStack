@@ -9,11 +9,14 @@ const Button = ({handleClick, text}) => (
 )
 
 const Statistic = ({name, value}) => {
-
     return <div>{name}: {value}</div>
 }
 
 const Statistics = (props) => {
+    if (props.arvosanaMaara === 0) {
+        return 'ei yhtään palautetta annettu'
+    }
+
     return (
         <div>
             <Statistic name={props.name1} value={props.value1} />
@@ -29,7 +32,7 @@ class App extends React.Component {
         this.state = {
             hyva: 0,
             neutraali: 0,
-            huono: 0
+            huono: 0,
 
         }
 
@@ -58,7 +61,7 @@ class App extends React.Component {
     positiivisia = () => {
         let arvosanaMaara = this.state.hyva + this.state.huono + this.state.neutraali
         if (arvosanaMaara === 0) {
-            return 0 + '%'
+            return '0%'
         }
         return (this.state.hyva/arvosanaMaara) * 100 + '%'
     }
@@ -86,7 +89,7 @@ class App extends React.Component {
                 <div>Hyvä: {this.state.hyva}</div>
                 <div>Neutraali: {this.state.neutraali}</div>
                 <div>Huono: {this.state.huono}</div>
-                <Statistics
+                <Statistics arvosanaMaara={this.state.hyva + this.state.huono + this.state.neutraali}
                     name1="Keskiarvo" value1={this.keskiarvo()}
                     name2="Positiivisia" value2={this.positiivisia()}
                 />
