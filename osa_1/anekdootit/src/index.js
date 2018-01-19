@@ -3,90 +3,86 @@ import ReactDOM from 'react-dom'
 
 
 class App extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      selected: 0,
-      maxIndex: 0,
-      maxValue: 0,
-      votes: [0,0,0,0,0,0]
-    }
-  }
-
-  randomInt = (max) => {
-      return Math.floor(Math.random() * Math.floor(max))
-  }
-
-  changeState = (value) => {
-      return () => {this.setState({selected: value})}
-  }
-
-  indexOfMax = (arr) => {
-
-    let max = arr[this.state.maxIndex]
-    let maxIndex = this.state.maxIndex
-    //console.log(max)
-    for (let i = 0; i < arr.length; i++) {
-        if (arr[i] > max) {
-            maxIndex = i
-            max = arr[i]
+    constructor(props) {
+        super(props)
+        this.state = {
+            selected: 0,
+            maxIndex: 0,
+            maxValue: 0,
+            votes: [0,0,0,0,0,0]
         }
     }
 
-    this.changeMax(maxIndex)
-    return maxIndex
-}
-
-changeMax = (value) => {
-    return () => {
-        this.setState({maxIndex: value})
+    randomInt = (max) => {
+        return Math.floor(Math.random() * Math.floor(max))
     }
-}
 
-  vote = () => {
-      return () => {
-        let x = this.state.selected
-        let cp = this.state.votes
-        cp[x] = cp[x] + 1
-        this.setState({votes: cp})
-       // this.setState({maxIndex: index})
-       // console.log(this.state.votes)
-      }
-  }
+    changeState = (value) => {
+        return () => {this.setState({selected: value})}
+    }
+
+    indexOfMax = (arr) => {
+
+        let max = arr[this.state.maxIndex]
+        let maxIndex = this.state.maxIndex
+        //console.log(max)
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i] > max) {
+                maxIndex = i
+                max = arr[i]
+            }
+        }
+
+        this.changeMax(maxIndex)
+        return maxIndex
+    }
+
+    changeMax = (value) => {
+        return () => {
+            this.setState({maxIndex: value})
+        }
+    }
+
+    vote = () => {
+        return () => {
+            let x = this.state.selected
+            let cp = this.state.votes
+            cp[x] = cp[x] + 1
+            this.setState({votes: cp})
+        }
+    }
 
 
 
 
+    render() {
+        return (
 
-
-  render() {
-    return (
-
-        <div>
             <div>
-                {this.props.anecdotes[this.state.selected]}
-            </div>
-            <div>
-                has {this.state.votes[this.state.selected]} votes
-            </div>
-            <div>
-                <button onClick={this.changeState(this.randomInt(5))}>
-                    next anecdote
-                </button>
-                <button onClick={this.vote()}>
-                    vote
-                </button>
-            </div>
-            <h1>anecdote with most votes</h1>
-            <div>
-                <p>{this.props.anecdotes[this.indexOfMax(this.state.votes)]}</p>
-                <p>has {this.state.votes[this.indexOfMax(this.state.votes)]} votes</p>
-            </div>
+                <div>
+                    {this.props.anecdotes[this.state.selected]}
+                </div>
+                <div>
+                    has {this.state.votes[this.state.selected]} votes
+                </div>
+                <div>
+                    <button onClick={this.changeState(this.randomInt(5))}>
+                        next anecdote
+                    </button>
+                    <button onClick={this.vote()}>
+                        vote
+                    </button>
+                </div>
+                <h1>anecdote with most votes</h1>
+                <div>
+                    <p>{this.props.anecdotes[this.indexOfMax(this.state.votes)]}</p>
+                    <p>has {this.state.votes[this.indexOfMax(this.state.votes)]} votes</p>
+                </div>
 
 
-        </div>
-    )
-  }
+            </div>
+        )
+    }
 }
 
 
