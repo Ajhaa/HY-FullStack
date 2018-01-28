@@ -12,16 +12,12 @@ const Form = (props) => (
   </form>
 )
 
-const Persons = ({ persons, filter }) => {
-  console.log(filter)
-  if (true) {
-    return (
-      <div>
-        {persons.filter(p => p.name.toLowerCase().indexOf(filter.toLowerCase()) !== -1).map(f => <p key={f.id}>{f.name + ' ' + f.number}</p>)}
-      </div>
-    )
-  }
-}
+const Persons = ({ persons, filter }) => (
+  <div>
+    {persons.filter(p => p.name.toLowerCase().indexOf(filter.toLowerCase()) !== -1).map(f => <p key={f.id}>{f.name + ' ' + f.number}</p>)}
+  </div>
+)
+
 
 
 
@@ -36,7 +32,6 @@ class App extends React.Component {
         { name: 'Lea Kutvonen', number: '040-123456', id: 4 }
 
       ],
-      filtered: [],
       newName: '',
       newNumber: '',
       filter: '',
@@ -59,11 +54,9 @@ class App extends React.Component {
 
   filterNumber = (event) => {
     event.preventDefault()
-
-    /*const persons = this.state.persons
-    const filtered = persons.filter(p => p.name.toLowerCase().indexOf(this.state.filter.toLowerCase()) != -1) */
     this.setState({ filter: this.state.filterText })
   }
+
 
 
   addNumber = (event) => {
@@ -73,12 +66,13 @@ class App extends React.Component {
       number: this.state.newNumber,
       id: this.state.persons.length + 1
     }
-    const contains = this.state.persons.some(p =>
-      p.name.toLowerCase() === this.state.newName.toLowerCase()
+    const nameExists = () => (
+      this.state.persons.some(p =>
+      p.name.toLowerCase() === this.state.newName.toLowerCase())
     )
 
     const persons = this.state.persons.concat(nameObject)
-    if (!contains) {
+    if (!nameExists()) {
       this.setState({
         persons: persons,
         newName: '',
