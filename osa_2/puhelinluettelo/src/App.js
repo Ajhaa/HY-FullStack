@@ -1,8 +1,8 @@
 import React from 'react'
 import axios from 'axios'
 
-const Button = ({ name, type }) => (
-  <button type={type}>{name}</button>
+const Button = ({ onClick, name, type }) => (
+  <button onClick={onClick} type={type}>{name}</button>
 )
 
 const Input = ({ name, onChange, value }) => (
@@ -12,10 +12,20 @@ const Input = ({ name, onChange, value }) => (
   </div>
 )
 
-const Persons = ({ persons, filter }) => (
-  <div>
-    {persons.filter(p => p.name.toLowerCase().indexOf(filter.toLowerCase()) !== -1).map(f => <p key={f.id}>{f.name + ' ' + f.number}</p>)}
-  </div>
+const Persons = ({ persons, filter, deleteName }) => (
+  <table>
+    <tbody>
+      {persons.filter(p => p.name.toLowerCase().indexOf(filter.toLowerCase()) !== -1)
+        .map(f =>
+          <tr key={f.id}>
+
+            <td>{f.name + ' ' + f.number}</td>
+            <td><Button onClick={deleteName(f.id)} name={"poista"} type={"button"} /></td>
+
+          </tr>
+        )}
+    </tbody>
+  </table>
 )
 
 
@@ -38,7 +48,16 @@ class App extends React.Component {
         this.setState({ persons: response.data })
       })
   }
-
+  deleteName = (id) => {
+    return () => {
+      let url = `http://localhost:3001/persons/${id}`
+      axios
+        .delete(url)
+        .then(response => {
+          this.setState({persons: this.state.persons.filter(p => p.id !== id)})
+        })
+    }
+  }
   handleChange = (event, t) => {
     this.setState({ [t]: event.target.value })
   }
@@ -78,7 +97,7 @@ class App extends React.Component {
       <div>
         <h2>Puhelinluettelo</h2>
         <input onChange={(e) => this.handleChange(e, 'filterText')} />
-        <button type="button" onClick={this.filterNumber}>hae</button>
+        <Button type={'button'} onClick={this.filterNumber} name={'hae'} />
         <h3>Lisää uusi</h3>
         <form onSubmit={this.addNumber}>
           <Input
@@ -94,7 +113,8 @@ class App extends React.Component {
           <Button name={'lisää'} type={'submit'} />
         </form>
         <h2>Numerot</h2>
-        <Persons persons={this.state.persons} filter={this.state.filter} />
+
+        <Persons deleteName={this.deleteName} persons={this.state.persons} filter={this.state.filter} />
       </div>
     )
   }
