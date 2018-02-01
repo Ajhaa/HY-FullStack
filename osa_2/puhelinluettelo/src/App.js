@@ -96,7 +96,22 @@ class App extends React.Component {
           })
         })
     } else {
-      this.setState({ newName: '', newNumber: '' })
+      return this.changeNumber()
+    }
+  }
+
+  changeNumber = () => {
+    if (window.confirm('Muutetaanko henkilön ' + this.state.newName + ' numero')) {
+      const person = this.state.persons.find(p => p.name === this.state.newName)
+      const changedPerson = { ...person, number: this.state.newNumber }
+      axios
+        .put(`http://localhost:3001/persons/${person.id}`, changedPerson)
+        .then(response => {
+          this.setState({
+            persons: this.state.persons
+              .map(p => p.id !== person.id ? person : changedPerson)
+          })
+        })
     }
   }
   render() {
