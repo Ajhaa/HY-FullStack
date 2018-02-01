@@ -48,15 +48,22 @@ class App extends React.Component {
         this.setState({ persons: response.data })
       })
   }
-  deleteName = (id) => {
+
+  confirmDelete = (id) => {
     return () => {
-      let url = `http://localhost:3001/persons/${id}`
-      axios
-        .delete(url)
-        .then(response => {
-          this.setState({persons: this.state.persons.filter(p => p.id !== id)})
-        })
+      const name = this.state.persons.find(p => p.id === id).name
+      if (window.confirm(`poistetaanko ${name}?`)) {
+        this.deleteName(id)
+      }
     }
+  }
+  deleteName = (id) => {
+    let url = `http://localhost:3001/persons/${id}`
+    axios
+      .delete(url)
+      .then(response => {
+        this.setState({ persons: this.state.persons.filter(p => p.id !== id) })
+      })
   }
   handleChange = (event, t) => {
     this.setState({ [t]: event.target.value })
@@ -114,7 +121,7 @@ class App extends React.Component {
         </form>
         <h2>Numerot</h2>
 
-        <Persons deleteName={this.deleteName} persons={this.state.persons} filter={this.state.filter} />
+        <Persons deleteName={this.confirmDelete} persons={this.state.persons} filter={this.state.filter} />
       </div>
     )
   }
