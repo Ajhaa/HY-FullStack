@@ -1,4 +1,5 @@
-import React from 'react';
+import React from 'react'
+import axios from 'axios'
 
 const Button = ({ name, type }) => (
   <button type={type}>{name}</button>
@@ -22,13 +23,7 @@ class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      persons: [
-        { name: 'Arto Hellas', number: '040-123456', id: 1 },
-        { name: 'Martti Tienari', number: '040-123456', id: 2 },
-        { name: 'Arto Järvinen', number: '040-123456', id: 3 },
-        { name: 'Lea Kutvonen', number: '040-123456', id: 4 }
-
-      ],
+      persons: [],
       newName: '',
       newNumber: '',
       filter: '',
@@ -36,18 +31,14 @@ class App extends React.Component {
     }
   }
 
-  handleNameChange = (event) => {
-    this.setState({ newName: event.target.value })
+  componentDidMount() {
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        this.setState({ persons: response.data })
+      })
   }
 
-  handleNumberChange = (event) => {
-    this.setState({ newNumber: event.target.value })
-  }
-
-  handleFilter = (event) => {
-
-    this.setState({ filterText: event.target.value })
-  }
   handleChange = (event, t) => {
     this.setState({ [t]: event.target.value })
   }
@@ -57,27 +48,27 @@ class App extends React.Component {
     this.setState({ filter: this.state.filterText })
   }
 
-
-
   addNumber = (event) => {
     event.preventDefault()
     const nameObject = {
       name: this.state.newName,
-      number: this.state.newNumber,
-      id: this.state.persons.length + 1
+      number: this.state.newNumber
     }
     const nameExists = () => (
       this.state.persons.some(p =>
         p.name.toLowerCase() === this.state.newName.toLowerCase())
     )
 
-    const persons = this.state.persons.concat(nameObject)
     if (!nameExists()) {
-      this.setState({
-        persons: persons,
-        newName: '',
-        newNumber: '',
-      })
+      axios
+        .post('http://localhost:3001/persons', nameObject)
+        .then(response => {
+          this.setState({
+            persons: this.state.persons.concat(response.data),
+            newName: '',
+            newNumber: ''
+          })
+        })
     } else {
       this.setState({ newName: '', newNumber: '' })
     }
