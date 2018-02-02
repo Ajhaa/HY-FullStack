@@ -1,5 +1,5 @@
 import React from 'react'
-import axios from 'axios'
+import personService from './services/persons'
 
 const Button = ({ onClick, name, type }) => (
   <button onClick={onClick} type={type}>{name}</button>
@@ -42,8 +42,8 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    axios
-      .get('http://localhost:3001/persons')
+    personService
+      .getAll()
       .then(response => {
         this.setState({ persons: response.data })
       })
@@ -58,9 +58,8 @@ class App extends React.Component {
     }
   }
   deleteName = (id) => {
-    let url = `http://localhost:3001/persons/${id}`
-    axios
-      .delete(url)
+    personService
+      .remove(id)
       .then(response => {
         this.setState({ persons: this.state.persons.filter(p => p.id !== id) })
       })
@@ -86,8 +85,8 @@ class App extends React.Component {
     )
 
     if (!nameExists()) {
-      axios
-        .post('http://localhost:3001/persons', nameObject)
+      personService
+      .create(nameObject)
         .then(response => {
           this.setState({
             persons: this.state.persons.concat(response.data),
@@ -104,12 +103,15 @@ class App extends React.Component {
     if (window.confirm('Muutetaanko henkilön ' + this.state.newName + ' numero')) {
       const person = this.state.persons.find(p => p.name === this.state.newName)
       const changedPerson = { ...person, number: this.state.newNumber }
-      axios
-        .put(`http://localhost:3001/persons/${person.id}`, changedPerson)
+      personService
+        .update(person.id, changedPerson)
         .then(response => {
           this.setState({
             persons: this.state.persons
-              .map(p => p.id !== person.id ? person : changedPerson)
+              .map(p => p.id !== person.id ? person : changedPerson),
+              newName: '',
+              newNumber: ''
+
           })
         })
     }

@@ -1,3 +1,14 @@
 {
-  "persons": []
+  "persons": [
+    {
+      "name": "Atte Haarni",
+      "number": "044-5513974",
+      "id": 1
+    },
+    {
+      "name": "Arto Hellas",
+      "number": "020202",
+      "id": 2
+    }
+  ]
 }
