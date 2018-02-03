@@ -5,18 +5,6 @@ import Form from './components/Form'
 import Persons from './components/Persons'
 import SearchField from './components/SearchField'
 import Notification from './components/Notification'
-/*const Notification = ({ message }) => {
-  if (message === null) {
-    return null
-  }
-
-  return (
-    <div className="message">
-      {message}
-    </div>
-  )
-} */
-
 
 class App extends React.Component {
   constructor(props) {
@@ -26,7 +14,6 @@ class App extends React.Component {
       newName: '',
       newNumber: '',
       filter: '',
-      filterText: '',
       message: null
     }
   }
@@ -91,7 +78,6 @@ class App extends React.Component {
             message: `lisättiin ${this.state.newName}`,
             newName: '',
             newNumber: ''
-
           })
           setTimeout(() => {
             this.setState({ message: null })
@@ -128,8 +114,7 @@ class App extends React.Component {
         <h2>Puhelinluettelo</h2>
         <Notification message={this.state.message} />
         <SearchField
-          onChange={(e) => this.handleChange(e, 'filterText')}
-          onClick={this.filterNumber}
+          onChange={(e) => this.handleChange(e, 'filter')}
         />
         <h3>Lisää uusi</h3>
         <Form

@@ -1,10 +1,9 @@
 import React from 'react'
-import Button from './Button'
 
 const SearchField = ({ onChange, onClick}) => (
   <div>
+    <p>rajaa nimiä</p>
     <input onChange={onChange} />
-    <Button type={'button'} onClick={onClick} name={'hae'} />
   </div>
 )
 
