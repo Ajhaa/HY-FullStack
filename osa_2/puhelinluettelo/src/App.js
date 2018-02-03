@@ -1,32 +1,21 @@
 import React from 'react'
 import personService from './services/persons'
+import './App.css'
+import Form from './components/Form'
+import Persons from './components/Persons'
+import SearchField from './components/SearchField'
+import Notification from './components/Notification'
+/*const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
 
-const Button = ({ onClick, name, type }) => (
-  <button onClick={onClick} type={type}>{name}</button>
-)
-
-const Input = ({ name, onChange, value }) => (
-  <div>
-    {name}:
-    <input value={value} onChange={onChange} />
-  </div>
-)
-
-const Persons = ({ persons, filter, deleteName }) => (
-  <table>
-    <tbody>
-      {persons.filter(p => p.name.toLowerCase().indexOf(filter.toLowerCase()) !== -1)
-        .map(f =>
-          <tr key={f.id}>
-
-            <td>{f.name + ' ' + f.number}</td>
-            <td><Button onClick={deleteName(f.id)} name={"poista"} type={"button"} /></td>
-
-          </tr>
-        )}
-    </tbody>
-  </table>
-)
+  return (
+    <div className="message">
+      {message}
+    </div>
+  )
+} */
 
 
 class App extends React.Component {
@@ -37,7 +26,8 @@ class App extends React.Component {
       newName: '',
       newNumber: '',
       filter: '',
-      filterText: ''
+      filterText: '',
+      message: null
     }
   }
 
@@ -58,10 +48,17 @@ class App extends React.Component {
     }
   }
   deleteName = (id) => {
+    const name = this.state.persons.find(p => p.id === id).name
     personService
       .remove(id)
       .then(response => {
-        this.setState({ persons: this.state.persons.filter(p => p.id !== id) })
+        this.setState({
+          persons: this.state.persons.filter(p => p.id !== id),
+          message: `poistettiin ${name}`
+        })
+        setTimeout(() => {
+          this.setState({ message: null })
+        }, 5000)
       })
   }
   handleChange = (event, t) => {
@@ -85,14 +82,20 @@ class App extends React.Component {
     )
 
     if (!nameExists()) {
+
       personService
-      .create(nameObject)
+        .create(nameObject)
         .then(response => {
           this.setState({
             persons: this.state.persons.concat(response.data),
+            message: `lisättiin ${this.state.newName}`,
             newName: '',
             newNumber: ''
+
           })
+          setTimeout(() => {
+            this.setState({ message: null })
+          }, 5000)
         })
     } else {
       return this.changeNumber()
@@ -109,10 +112,13 @@ class App extends React.Component {
           this.setState({
             persons: this.state.persons
               .map(p => p.id !== person.id ? person : changedPerson),
-              newName: '',
-              newNumber: ''
-
+            message: `muutettiin henkilön ${this.state.newName} numeroa`,
+            newName: '',
+            newNumber: ''
           })
+          setTimeout(() => {
+            this.setState({ message: null })
+          }, 5000)
         })
     }
   }
@@ -120,24 +126,29 @@ class App extends React.Component {
     return (
       <div>
         <h2>Puhelinluettelo</h2>
-        <input onChange={(e) => this.handleChange(e, 'filterText')} />
-        <Button type={'button'} onClick={this.filterNumber} name={'hae'} />
+        <Notification message={this.state.message} />
+        <SearchField
+          onChange={(e) => this.handleChange(e, 'filterText')}
+          onClick={this.filterNumber}
+        />
         <h3>Lisää uusi</h3>
-        <form onSubmit={this.addNumber}>
-          <Input
-            name={'nimi'}
-            value={this.state.newName}
-            onChange={(e) => this.handleChange(e, 'newName')}
-          />
-          <Input
-            name={'numero'}
-            value={this.state.newNumber}
-            onChange={(e) => this.handleChange(e, 'newNumber')}
-          />
-          <Button name={'lisää'} type={'submit'} />
-        </form>
+        <Form
+          addNumber={this.addNumber}
+          inputs={[
+            {
+              "name": "nimi",
+              "value": this.state.newName,
+              "onChange": (e) => this.handleChange(e, 'newName')
+            },
+            {
+              "name": "numero",
+              "value": this.state.newNumber,
+              "onChange": (e) => this.handleChange(e, 'newNumber')
+            }
+          ]}
+          bName={'lisää'}
+        />
         <h2>Numerot</h2>
-
         <Persons deleteName={this.confirmDelete} persons={this.state.persons} filter={this.state.filter} />
       </div>
     )
